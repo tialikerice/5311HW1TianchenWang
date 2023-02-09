@@ -20,7 +20,7 @@
                 <h1 id = "total" style="color: white; text-align: center;"> </h1>
             </div>
         </head>
-        <h1 id = "total" style="color: white; text-align: center;"> 1. What is the Date Of Birth Distribution of the Trees?</h1>
+        <h1 id = "total" style="color: white; text-align: center;"> 1. What is the Diameter at Breast Height (DBH) Distribution of the Trees?</h1>
         <div id="block_container_1" style="display: flex;align-items: center;justify-content: center;">
             <div id = "block1" style="display:inline-block;margin-right:10px;background-color:white">
                 <svg id="choropleth" height="700" width="700" ></svg>
@@ -31,14 +31,29 @@
         </div>   
         <br>
         <div style="margin-left: 10%; margin-right: 10%;">
-            <h2 style="color: white; text-align: center;">The map on the left shows that some neighborhoods, such as Sunset Boulevard, have 
-                a high concentration of older trees, possibly due to being developed earlier or having a higher median income compared to other areas.
-                 In contrast, other areas, such as Golden Gate Park, have no sidewalk trees, as the park is well-stocked with trees but is not counted in this dataset.
-                </h2>
-            <h2 style="color: white; text-align: center;">
-                The histogram that accompanies the map highlights that the majority of sidewalk trees in San Francisco were planted in the last 4 to 8 years, 
-                with the most common age being 4 years old. This suggests that the city is actively planting trees to enhance the urban landscape, improve 
-                the quality of life for residents, and provide environmental benefits.</h2>
+            <h3 style="color: white; text-align: center;">
+                The bubble map on the left displays the geographical distribution of the diameter at breast height (DBH) 
+                of sidewalk trees in different neighborhoods throughout the city. The size and color of the bubbles 
+                indicate the diameter at breast height (DBH) of the trees, with larger circles representing larger
+                 diameter at breast height (DBH) trees and smaller circles representing smaller diameter at breast 
+                 height (DBH) trees. The color of the bubbles also represents the diameter at breast height (DBH) 
+                 of the trees, with yellow indicating a smaller diameter at breast height (DBH) trees and green 
+                 indicating a larger diameter at breast height (DBH) trees. The map on the left illustrates that 
+                 some neighborhoods, such as Sunset Boulevard, have a high concentration of larger diameter at 
+                 breast height (DBH) trees, possibly due to the community's long history of development or earlier
+                  development. Other neighborhoods have a high concentration of smaller diameter at breast height 
+                  (DBH) trees, which could suggest recent development or community infrastructure redevelopment. 
+                  Additionally, some areas, like Golden Gate Park, have very few sidewalk trees, despite the park 
+                  having a high number of trees. However, these trees are not accounted for in this dataset.</h3>
+            <h3 style="color: white; text-align: center;">
+                The histogram offers a more in-depth understanding of the sidewalk trees in San Francisco through
+                 its depiction of the Diameter at Breast Height (DBH) distribution. The histogram shows that the 
+                 majority of sidewalk trees have a DBH of approximately 4, offering a broad idea of the size of
+                 these trees and providing a closer look into the city's tree population. The histogram and bubble
+                  map together present a complete picture of the frequency of tree diameter (DBH). It is important 
+                  to note, however, that the interpretation of the size of the trees, whether they are young or old, 
+                  depends on the species of the trees and cannot be determined solely based on the DBH value.
+            </h3>
         </div>
         <br>
         <h1 id = "total" style="color: white; text-align: center;"> 2. What is the Tree Number Distribution?</h1>
@@ -48,18 +63,14 @@
             </div>
         </div>
         <div style="margin-left: 10%; margin-right: 10%;">
-            <h2 style="color: white; text-align: center;">In this data visualization, we used color hue to represent the number of trees occupying city sidewalks 
+            <h3 style="color: white; text-align: center;">In this data visualization, we used color hue to represent the number of trees occupying city sidewalks 
                 in different neighborhoods of San Francisco. The color range goes from yellow, representing the lowest 
                 number of trees, to green, representing the highest number of trees. This map provides a visual 
                 representation of the density of trees in each neighborhood.
-            </h2>
-            <h2 style="color: white; text-align: center;">
-                Comparing the first map with the one that shows the date of birth distribution of the trees, 
-                we can see that neighborhoods with a higher concentration of older trees tend to have more trees overall. 
-                This correlation suggests that neighborhoods that have been developed for a longer time may have a higher density of trees, both in terms of quantity and age.
-                In conclusion, this data visualization provides valuable insights into the distribution and quantity of trees 
-                in different neighborhoods in San Francisco. The two maps (Date Of Birth Distribution Map and Tree Number Distribution) highlights the relationship between the age and density of trees.
-                </h2>
+            </h3>
+            <h3 style="color: white; text-align: center;">
+                By comparing the first map with the histogram of the diameter at Breast Height (DBH) distribution, it becomes apparent that neighborhoods with a higher concentration of larger DBH trees tend to have a higher overall number of trees. This correlation suggests that neighborhoods that have been developed for a longer period may possess a higher tree density, both in terms of quantity and DBH. Overall, these data visualizations provide valuable information about the distribution and abundance of trees in various neighborhoods in San Francisco. The diameter at breast height Map and the tree number distribution map present a clear relationship between the DBH of the trees and their density in the city.
+</h3>
         </div>
         <br>
         <h1 id = "total" style="color: white; text-align: center;"> 3. What is The Number of Trees Planted by qCaretaker Over Time?</h1>
@@ -67,7 +78,7 @@
             <svg id="linechart" height="500" width="900" style="margin:20px;"></svg>
             </div>
         <div style="margin-left: 10%; margin-right: 10%;">
-        <h2 style="color: white; text-align: center;"> We used a line chart to show the number of trees that have been planted over time, 
+        <h3 style="color: white; text-align: center;"> We used a line chart to show the number of trees that have been planted over time, 
             and color-coded the lines by qCaretakers to represent the five most common tree owners or "qCaretakers." 
             These top five owners are: 
             private individuals, the Department of Public Works (DPW), 
@@ -84,7 +95,7 @@
             In conclusion, this data visualization provides a comprehensive look at the ownership and maintenance 
             of trees occupying city sidewalks in San Francisco. It highlights the key players in urban greening efforts 
             and the changing patterns of tree ownership over time.
-        </h2>
+        </h3>
     </div>
         </div>
 
@@ -205,7 +216,7 @@
                         .attr("y", 25)
                         .style("font-size", "30px") 
                         .style("fill", "black")
-                        .text("Date Of Birth Distribution Map");
+                        .text("Diameter at Breast Height Distribution Map");
 
                     var gradient = legend.append("defs")
                         .append("linearGradient")
@@ -270,14 +281,14 @@
                         .attr("text-anchor", "middle")  
                         .style("font-size", "30px") 
                         .style("fill", "white")
-                        .text("Date Of Birth Of the Trees");
+                        .text("Diameter at Breast Height Of the Trees");
                     map3.append("text")
                         .attr("x", (mapWidth3 / 2))             
                         .attr("y", mapHeight3 +50)
                         .attr("text-anchor", "middle")  
                         .style("font-size", "25px") 
                         .style("fill", "white")
-                        .text("Years Of The Trees");
+                        .text("Diameter at Breast Height The Trees");
                     map3.append("line")
                         .attr("y1", y(0))
                         .attr("y2", y(8100))
@@ -292,7 +303,7 @@
                         .attr("y", y(8000)) 
                         .style("font-size", "20px") 
                         .style("fill", "blue")
-                        .text("4 Yrs (the most common age in the filtered dataset)");
+                        .text("4 (the most common diameter at breast height in the filtered data)");
                     map3.append("text")
                         .attr("class", "y label")
                         .attr("text-anchor", "end")
