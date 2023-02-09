@@ -1,0 +1,525 @@
+<html>
+    <style>
+        .circlemap {
+          stroke: white;
+          stroke-width: 1.5px;
+          fill: grey;
+        }
+        .colorhuemap {
+          stroke: lightgray;
+          stroke-width: 1.5px;
+          fill: grey; 
+        }
+        </style>
+    <body style="background-color: #8EA076;">
+        <head>
+            <script src="https://d3js.org/d3.v7.min.js"></script>
+            <script src="https://d3js.org/topojson.v3.min.js"></script>
+            <div>
+                <h1 style="color: white; text-align: center;">San Francisco Street Tree Map</h1>
+                <h1 id = "total" style="color: white; text-align: center;"> </h1>
+            </div>
+        </head>
+        <h1 id = "total" style="color: white; text-align: center;"> 1. What is the Date Of Birth Distribution of the Trees?</h1>
+        <div id="block_container_1" style="display: flex;align-items: center;justify-content: center;">
+            <div id = "block1" style="display:inline-block;margin-right:10px;background-color:white">
+                <svg id="choropleth" height="700" width="700" ></svg>
+            </div>
+            <div id = "block2" style="color: white; display:inline-block; margin-top: 30;"> 
+                <svg id = "histogram" height="700" width="700" style="margin-left: 20;"></svg>
+            </div>
+        </div>   
+        <br>
+        <div style="margin-left: 10%; margin-right: 10%;">
+            <h2 style="color: white; text-align: center;">The map on the left shows that some neighborhoods, such as Sunset Boulevard, have 
+                a high concentration of older trees, possibly due to being developed earlier or having a higher median income compared to other areas.
+                 In contrast, other areas, such as Golden Gate Park, have no sidewalk trees, as the park is well-stocked with trees but is not counted in this dataset.
+                </h2>
+            <h2 style="color: white; text-align: center;">
+                The histogram that accompanies the map highlights that the majority of sidewalk trees in San Francisco were planted in the last 4 to 8 years, 
+                with the most common age being 4 years old. This suggests that the city is actively planting trees to enhance the urban landscape, improve 
+                the quality of life for residents, and provide environmental benefits.</h2>
+        </div>
+        <br>
+        <h1 id = "total" style="color: white; text-align: center;"> 2. What is the Tree Number Distribution?</h1>
+        <div id="block_container_2" style="display: flex;align-items: center;justify-content: center;">
+            <div style="display:inline-block;margin-right:10px;">
+                <svg id="colorhuemap" height="700" width="700" style="display:inline-block;margin-right:10px;background-color:white"></svg>
+            </div>
+        </div>
+        <div style="margin-left: 10%; margin-right: 10%;">
+            <h2 style="color: white; text-align: center;">In this data visualization, we used color hue to represent the number of trees occupying city sidewalks 
+                in different neighborhoods of San Francisco. The color range goes from yellow, representing the lowest 
+                number of trees, to green, representing the highest number of trees. This map provides a visual 
+                representation of the density of trees in each neighborhood.
+            </h2>
+            <h2 style="color: white; text-align: center;">
+                Comparing the first map with the one that shows the date of birth distribution of the trees, 
+                we can see that neighborhoods with a higher concentration of older trees tend to have more trees overall. 
+                This correlation suggests that neighborhoods that have been developed for a longer time may have a higher density of trees, both in terms of quantity and age.
+                In conclusion, this data visualization provides valuable insights into the distribution and quantity of trees 
+                in different neighborhoods in San Francisco. The two maps (Date Of Birth Distribution Map and Tree Number Distribution) highlights the relationship between the age and density of trees.
+                </h2>
+        </div>
+        <br>
+        <h1 id = "total" style="color: white; text-align: center;"> 3. What is The Number of Trees Planted by qCaretaker Over Time?</h1>
+        <div id="block_container_3" style="color: white; display: flex;align-items: center;justify-content: center;">
+            <svg id="linechart" height="500" width="900" style="margin:20px;"></svg>
+            </div>
+        <div style="margin-left: 10%; margin-right: 10%;">
+        <h2 style="color: white; text-align: center;"> We used a line chart to show the number of trees that have been planted over time, 
+            and color-coded the lines by qCaretakers to represent the five most common tree owners or "qCaretakers." 
+            These top five owners are: 
+            private individuals, the Department of Public Works (DPW), 
+            the San Francisco Unified School District (SFUSD), 
+            Recreation and Park (Rec/Park), 
+            and the Port of San Francisco.
+            The data shows that private individuals and DPW are the top two tree owners in San Francisco. 
+            This suggests that while the city is actively involved in maintaining trees on public sidewalks, 
+            private individuals also play an important role in shaping the urban forest.
+            <br>
+            In conclusion, this data visualization provides a comprehensive look at the ownership and maintenance 
+            of trees occupying city sidewalks in San Francisco. It highlights the key players in urban greening efforts 
+            and the changing patterns of tree ownership over time.
+        </h2>
+    </div>
+        </div>
+
+            <script>
+                const svg = d3.select("svg#choropleth");
+                const width = svg.attr("width");
+                const height = svg.attr("height");
+                const margin = { top: 10, right: 10, bottom: 10, left:-10};
+                const mapWidth = width - margin.left - margin.right;
+                const mapHeight = height - margin.top - margin.bottom;
+                const map = svg.append("g")
+                                .attr("transform","translate("+margin.left+","+margin.top+")");
+                
+                const svg2 = d3.select("svg#colorhuemap");
+                const width2 = svg2.attr("width");
+                const height2 = svg2.attr("height");
+                const margin2 = { top: 10, right: 10, bottom: 10, left:-10};
+                const mapWidth2 = width2 - margin2.left - margin2.right;
+                const mapHeight2 = height2 - margin2.top - margin2.bottom;
+                const map2 = svg2.append("g")
+                                .attr("transform","translate("+margin2.left+","+margin2.top+")"); 
+
+                const svg3 = d3.select("svg#histogram");
+                const width3 = svg3.attr("width");
+                const height3 = svg3.attr("height");
+                const margin3 = {top: 40, right: 20, bottom: 50, left: 100};
+                const mapWidth3 = width3 - margin3.left - margin3.right;
+                const mapHeight3 = height3 - margin3.top - margin3.bottom;
+                const map3 = svg3.append("g")
+                .attr("transform","translate(" + margin3.left + "," + margin3.top + ")");
+
+                const svg4 = d3.select("svg#linechart");
+                const width4 = svg4.attr("width");
+                const height4 = svg4.attr("height");
+                const margin4 = { top: 20, right: 20, bottom: 50, left: 100};
+                const mapWidth4 = width4 - margin4.left - margin4.right;
+                const mapHeight4 = height4 - margin4.top - margin4.bottom;
+                const map4 = svg4.append("g")
+                    .attr("transform","translate("+margin4.left+","+margin4.top+")");
+              
+                const requestDataFF = async function() {
+                    const street_tree_filtered = await d3.csv('Street_Tree_List-2022-01-30_FILTERED.csv');
+                    street_tree_filtered.forEach( (d) => {d['Latitude'] = Number(d['Latitude']); 
+                                                          d['Longitude'] = Number(d['Longitude']);
+                                                          d['SiteOrder'] = Number(d['SiteOrder']);
+                                                          d['DBH'] = Number(d['DBH']);
+                                                          d['SiteOrder'] = Number(d['SiteOrder']);
+                                                          d['PlantDate'] = new Date(d['PlantDate']);
+                                                          d['Year'] = d['PlantDate'].getFullYear();
+                                                        });
+                    const SF_Neighborhoods = await d3.json('SF-Neighborhoods.geo.json');
+                    console.log(SF_Neighborhoods);
+                    // Total number of the trees in the dataset
+                    const total = d3.count(street_tree_filtered, d => d.TreeID);
+                    document.getElementById("total").innerHTML = "Total Tree Number from Dataset:  " + total;
+
+                    var Neighborhoods = topojson.feature(SF_Neighborhoods, SF_Neighborhoods.objects.SFNeighborhoods); 
+                    var projection = d3.geoMercator()
+                                        .fitSize([mapWidth, mapHeight], Neighborhoods);
+                    var path = d3.geoPath()
+                            .projection(projection);
+                    const colorScale = d3.scaleLinear()
+                        .domain(d3.extent(street_tree_filtered, d => Math.log(d.DBH+1)))
+                        .range(["yellow", "Green"]);
+                        //.range(["#8ab446", "#072a16"]);
+                    var g = svg.append("g"); 
+                    g.selectAll("path")
+                        .data(topojson.feature(SF_Neighborhoods, SF_Neighborhoods.objects.SFNeighborhoods).features)
+                        .enter().append("path")
+                        .style("fill", "#bfbfbf")
+                        .attr("d", path)
+                        .attr("class", 'circlemap');
+                        street_tree_filtered.forEach( d => {d.Position = projection( [d.Longitude, d.Latitude] );});
+                    const size = d3.scaleLinear()
+                                    .domain(d3.extent(street_tree_filtered, d => d.DBH))
+                                    .range([1, 5]) 
+                    let street_tree_sorted = street_tree_filtered.sort((a, b) => a.DBH - b.DBH)
+                    g.selectAll("circle").data(street_tree_sorted)
+                            .join("circle")
+                            .sort()
+                            .attr("r", d => size(d.DBH))
+                            .attr("fill", d => colorScale(Math.log(d.DBH+1)))
+                            .attr("opacity", 0.8)
+                            .attr("cx", d => d.Position[0])
+                            .attr("cy", d => d.Position[1]);
+                    var colorScale2 = d3.scaleSequential()
+                                        .domain([0, 1])
+                                        .range(["yellow", "green"]);
+
+                    var legend = svg.append("g")
+                                    .attr("class", "legend")
+                                    .attr("transform", "translate(" + 10 + "," + 80 + ")");
+                    var title = svg.append("g")
+                                    .attr("class", "title")
+                                    .attr("transform", "translate(" + 10 + "," + 20 + ")");
+
+                    legend.append("rect")
+                        .attr("width", 20)
+                        .attr("height", 200)
+                        .style("fill", "url(#gradient)")
+                        .attr("transform", "rotate(-90)");
+                    legend.append("text")
+                        .attr("x", 10)             
+                        .attr("y", 25)
+                        .attr("text-anchor", "middle")  
+                        .style("font-size", "20px") 
+                        .style("fill", "black")
+                        .text(d3.extent(street_tree_filtered, d => d.DBH)[0]);
+                    legend.append("text")
+                        .attr("x", 190)             
+                        .attr("y", 25)
+                        .attr("text-anchor", "middle")  
+                        .style("font-size", "20px") 
+                        .style("fill", "black")
+                        .text(d3.extent(street_tree_filtered, d => d.DBH)[1]);
+                    title.append("text")
+                        .attr("x", 0)             
+                        .attr("y", 25)
+                        .style("font-size", "30px") 
+                        .style("fill", "black")
+                        .text("Date Of Birth Distribution Map");
+
+                    var gradient = legend.append("defs")
+                        .append("linearGradient")
+                        .attr("id", "gradient")
+                        .attr("x1", "0%")
+                        .attr("y1", "0%")
+                        .attr("x2", "0%")
+                        .attr("y2", "100%");
+
+                    gradient.selectAll("stop")
+                        .data(d3.range(0, 1, 0.01))
+                        .enter().append("stop")
+                        .attr("offset", function(d) { return 100 * d + "%"; })
+                        .attr("stop-color", function(d) { return colorScale2(d); });
+                }
+                requestDataFF();
+
+                const histogram = async function() {
+                    const street_tree_filtered = await d3.csv('Street_Tree_List-2022-01-30_FILTERED.csv');
+                    street_tree_filtered.forEach( (d) => {d['Latitude'] = Number(d['Latitude']); 
+                                                          d['Longitude'] = Number(d['Longitude']);
+                                                          d['SiteOrder'] = Number(d['SiteOrder']);
+                                                          d['DBH'] = Number(d['DBH'])
+                                                          d['SiteOrder'] = Number(d['SiteOrder']);
+                                                          d['PlantDate'] = new Date(d['PlantDate']);
+                                                          d['Year'] = d['PlantDate'].getFullYear();});
+
+                    const extent = d3.extent(street_tree_filtered, d => d.DBH);
+                    const x = d3.scaleLinear()
+                        .domain(extent)
+                        .range([0, mapWidth3]);
+                    map3.append("g")
+                        .attr("transform", `translate(0, ${mapHeight3})`)
+                        .call(d3.axisBottom(x))
+                        .style("font-size", "20px");                       
+
+                    const histogram = d3.histogram()
+                        .value(function(d) { return d.DBH; })
+                        .domain(x.domain())
+                        .thresholds(x.ticks(70));
+
+                    const bins = histogram(street_tree_filtered);
+
+                    const y = d3.scaleLinear()
+                        .range([mapHeight3, 0]);
+                        y.domain([0, d3.max(bins, function(d) { return d.length; })]);
+                    map3.append("g")
+                        .call(d3.axisLeft(y))
+                        .style("font-size", "20px");;
+
+                    map3.selectAll("rect")
+                        .data(bins)
+                        .join("rect")
+                        .attr("x", 1)
+                        .attr("transform", function(d) { return `translate(${x(d.x0)} , ${y(d.length)})`})
+                        .attr("width", function(d) { return x(d.x1) - x(d.x0) -1})
+                        .attr("height", function(d) { return mapHeight3 - y(d.length); })
+                        .style("fill", "white")
+                    map3.append("text")
+                        .attr("x", (mapWidth3 / 2))             
+                        .attr("y", 0 - (margin3.top / 2))
+                        .attr("text-anchor", "middle")  
+                        .style("font-size", "30px") 
+                        .style("fill", "white")
+                        .text("Date Of Birth Of the Trees");
+                    map3.append("text")
+                        .attr("x", (mapWidth3 / 2))             
+                        .attr("y", mapHeight3 +50)
+                        .attr("text-anchor", "middle")  
+                        .style("font-size", "20px") 
+                        .style("fill", "white")
+                        .text("Years Of The Trees");
+                    map3.append("line")
+                        .attr("y1", y(0))
+                        .attr("y2", y(8100))
+                        .attr("x1", x(4))
+                        .attr("x2", x(4))
+                        .style("stroke", "blue")
+                        .style("stroke-width", "2") 
+                        .style("stroke-dasharray", "5,5")
+
+                    map3.append("text")
+                        .attr("x", x(5))             
+                        .attr("y", y(8000)) 
+                        .style("font-size", "20px") 
+                        .style("fill", "blue")
+                        .text("4 Yrs (the most common age in the filtered dataset)");
+                    map3.append("text")
+                        .attr("class", "y label")
+                        .attr("text-anchor", "end")
+                        .attr("y", -85)
+                        .attr("dy", ".75em")
+                        .attr("transform", "rotate(-90)")
+                        .style("font-size", "20px") 
+                        .style("fill", "white")
+                        .text("Frequency");
+                }
+                histogram();
+
+                const linechart = async function() {
+                    const street_tree_filtered = await d3.csv('Street_Tree_List-2022-01-30_FILTERED.csv');
+                    street_tree_filtered.forEach( (d) => {d['Latitude'] = Number(d['Latitude']); 
+                                                          d['Longitude'] = Number(d['Longitude']);
+                                                          d['SiteOrder'] = Number(d['SiteOrder']);
+                                                          d['DBH'] = Number(d['DBH'])
+                                                          d['SiteOrder'] = Number(d['SiteOrder']);
+                                                          d['PlantDate'] = new Date(d['PlantDate']);
+                                                          d['Year'] = d['PlantDate'].getFullYear();});
+                    //remove the blank cell in the year column
+                    street_tree_remove_blank = street_tree_filtered.filter((d) => {
+                            if(isNaN(d.Year) == true || d.Year.toString().length != 4){
+                                return false;
+                            }
+                            d.Year = d.Year;
+                            return true;
+                    });
+                    street_tree_remove_blank = street_tree_filtered.filter((d) => {
+                            if(isNaN(d.Year) == true || d.Year.toString().length != 4){
+                                return false;
+                            }
+                            d.Year = d.Year;
+                            return true;
+                    });
+
+                    var sumstat = Array.from(d3.rollup(street_tree_remove_blank,
+                                                    v => v.length,
+                                                    d => d.qCaretaker,
+                                                    d => d.Year
+                                                ))
+                    console.log(sumstat)
+
+                    let arryList = Array.from(sumstat, ([qCaretaker, Year]) => ({
+                        qCaretaker: qCaretaker,
+                        Year: Object.entries(Object.fromEntries(Year))
+                    }));
+                    // Top 5 caretaker
+                    let caretakerCount = Array.from(d3.rollup(street_tree_remove_blank, v => v.length, d => d.qCaretaker))
+                    let topCaretaker = caretakerCount.sort((a, b) => b[1] - a[1]).slice(0, 5);
+                    let topCaretakerArray = []
+                    for (let d of topCaretaker) { topCaretakerArray = topCaretakerArray.concat(d[0]) }
+                    arryList = arryList.filter(d => topCaretakerArray.includes(d.qCaretaker));
+                    console.log(arryList)
+                    
+                    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+                    const x = d3.scaleLinear()
+                                .domain(d3.extent(street_tree_filtered, function(d) { return d.Year; }))
+                                .range([ 0, mapWidth4 ]);
+                    map4.append("g")
+                                .attr("transform", `translate(0, ${mapHeight4})`)
+                                .call(d3.axisBottom(x))
+                                .style("font-size", "20px");  
+                    let Listofcaretaker = []
+                    for (let d of arryList) {
+                        Listofcaretaker = Listofcaretaker.concat(d.Year)
+                    }
+                    const y = d3.scaleLinear()
+                                .domain(d3.extent(Listofcaretaker, function(d) { return d[1]; }))
+                                .range([ mapHeight4, 10 ]);
+                    map4.append("g")
+                            .call(d3.axisLeft(y))
+                            .style("font-size", "20px");
+                    let caretakerLine = d3.line()
+                                            .x(function(d){ return x(d[0]); })
+                                            .y(function(d){ return y(d[1]); });
+                    let lineGroup = map4.append('g').attr('id', "lineGroup");
+                    lineGroup.selectAll("path")
+                                .data(arryList)
+                                .join("path")
+                                .attr("fill", "None")
+                                .attr("stroke", (d) => { return colorScale(d.qCaretaker) } )
+                                .attr("stroke-width", 2)
+                                .attr("d", (d) => { return caretakerLine(d.Year)})
+                    const legend = map4.append("g")
+                                .attr("transform", "translate(" + (mapWidth4 - 70) + "," + (20) + ")")
+                                .attr("id", "legend");
+
+                    legend.selectAll("rect")
+                            .data(arryList)
+                            .join("rect")
+                            .attr("x", 0)
+                            .attr("y", (d, i) => i * 20)
+                            .attr("width", 15)
+                            .attr("height", 15)
+                            .attr("fill", d => colorScale(d.qCaretaker));
+
+                    legend.selectAll("text")
+                            .data(arryList)
+                            .join("text")
+                            .attr("x", 20)
+                            .attr("y", (d, i) => i * 20 + 10)
+                            .text(d => d.qCaretaker)
+                            .style("font-size", "18px")
+                            .attr("alignment-baseline", "middle")
+                            .style("fill", "white");
+
+                    map4.append("text")
+                            .attr("x", (mapWidth4 / 2))             
+                            .attr("y", mapHeight4 +50)
+                            .attr("text-anchor", "middle")  
+                            .style("font-size", "20px") 
+                            .style("fill", "white")
+                            .text("Year");
+                            
+                    map4.append("text")
+                            .attr("class", "y label")
+                            .attr("text-anchor", "end")
+                            .attr("y", -80)
+                            .attr("dy", ".75em")
+                            .attr("transform", "rotate(-90)")
+                            .style("font-size", "20px") 
+                            .style("fill", "white")
+                            .text("Number of Trees");
+
+                }
+                linechart();
+
+                const colorhuemap = async function() {
+                    const polygonCounts = await d3.json('polygonCounts.json');
+                    const street_tree_filtered = await d3.csv('Street_Tree_List-2022-01-30_FILTERED.csv');
+                    console.log(street_tree_filtered);
+                     street_tree_filtered.forEach( (d) => {d['Latitude'] = Number(d['Latitude']); 
+                                                          d['Longitude'] = Number(d['Longitude']);
+                                                          d['SiteOrder'] = Number(d['SiteOrder'])});
+                    const SF_Neighborhoods = await d3.json('SF-Neighborhoods.geo.json');
+                    console.log(SF_Neighborhoods);
+
+                    var Neighborhoods = topojson.feature(SF_Neighborhoods, SF_Neighborhoods.objects.SFNeighborhoods); 
+                    var projection = d3.geoMercator()
+                                        .fitSize([mapWidth2, mapHeight2], Neighborhoods);
+                    var path = d3.geoPath()
+                            .projection(projection);
+                    var g = svg2.append("g");
+                    
+/*                     //Moved this part to data preprocessing part and created a new dataset
+                    //var polygonCounts = {};
+                    var Neighborhoods_feature = topojson.feature(SF_Neighborhoods, SF_Neighborhoods.objects.SFNeighborhoods).features;
+                    Neighborhoods_feature.forEach(polygon => {
+                        // Get the polygon's name
+                        var polygonName = polygon.properties.name;
+                        console.log(polygonName)
+                        // Initialize the count for this polygon to 0
+                        polygonCounts[polygonName] = 0;
+                        // Iterate through each point in the data points
+                        street_tree_filtered.forEach(point=>{
+                            // Convert the point's latitude and longitude into a GeoJSON Point
+                            var pointGeoJSON = {
+                                type: "Point",
+                                coordinates: [point.Longitude, point.Latitude]
+                            };
+                            // Use the D3 path generator to check if the point is within the polygon
+                            if (d3.geoContains(polygon, pointGeoJSON.coordinates)) {
+                                // If the point is within the polygon, increment the count for that polygon
+                                polygonCounts[polygonName]++;
+                            }
+                        }); 
+                    });*/
+                    const colorScale1 = d3.scaleQuantile()
+                        .domain(Object.values(polygonCounts))
+                        .range(["#f3f4d3","#d3e29d", "#acc864","#8ab446", "#2d6b22",  "#072a16"]);
+                    console.log(polygonCounts);
+                    g.selectAll("path")
+                        .data(topojson.feature(SF_Neighborhoods, SF_Neighborhoods.objects.SFNeighborhoods).features)
+                        .enter().append("path")
+                        .style("fill", d => colorScale1(polygonCounts[d.properties.name]))
+                        .attr("d", path)
+                        .attr("class", 'colorhuemap');
+                    street_tree_filtered.forEach( d => {d.Position = projection( [d.Longitude, d.Latitude] );});
+                    g.selectAll("circle").data(SF_Neighborhoods)
+                                            .join("circle")
+                                            .attr("r", d => d.DBH)
+                                            .attr("fill", d => colorScale1(polygonCounts[d.properties.name]))
+                                            .attr("opacity", 0.4)
+                                            .attr("cx", d => d.Position[0])
+                                            .attr("cy", d => d.Position[1]);
+                    var list_color = colorScale1.quantiles()
+                    console.log(list_color)
+                    var title2 = svg2.append("g")
+                                    .attr("class", "title")
+                                    .attr("transform", "translate(" + 10 + "," + 20 + ")");
+                    title2.append("text")
+                        .attr("x", 0)             
+                        .attr("y", 25)
+                        .style("font-size", "30px") 
+                        .style("fill", "black")
+                        .text("Tree Number Distribution Map");
+                    var legend2 = svg2.append("g")
+                                    .attr("class", "legend")
+                                    .attr("transform", "translate(" + 10 + "," + 70 + ")");
+                                legend2.append("rect").attr("x",10).attr("y",0)
+                                        .attr("width", 20).attr("height", 20)
+                                        .style("fill", "#072a16")
+                                legend2.append("rect").attr("x",10).attr("y",25)
+                                        .attr("width", 20).attr("height", 20)
+                                        .style("fill", "#2d6b22")
+                                legend2.append("rect").attr("x",10).attr("y",50)
+                                        .attr("width", 20).attr("height", 20)
+                                        .style("fill", "#8ab446")
+                                legend2.append("rect").attr("x",10).attr("y",75)
+                                        .attr("width", 20).attr("height", 20)
+                                        .style("fill", "#acc864")
+                                legend2.append("rect").attr("x",10).attr("y",100)
+                                        .attr("width", 20).attr("height", 20)
+                                        .style("fill", "#d3e29d")
+                                legend2.append("rect").attr("x",10).attr("y",125)
+                                        .attr("width", 20).attr("height", 20)
+                                        .style("fill", "#f3f4d3")
+                                legend2.append("text").attr("x", 40).attr("y", 10).text(d3.format(".0f")(list_color[4])).style("font-size", "15px").attr("alignment-baseline","middle")
+                                legend2.append("text").attr("x", 40).attr("y", 35).text(d3.format(".0f")(list_color[3])).style("font-size", "15px").attr("alignment-baseline","middle")
+                                legend2.append("text").attr("x", 40).attr("y", 60).text(d3.format(".0f")(list_color[2])).style("font-size", "15px").attr("alignment-baseline","middle")
+                                legend2.append("text").attr("x", 40).attr("y", 85).text(d3.format(".0f")(list_color[1])).style("font-size", "15px").attr("alignment-baseline","middle")
+                                legend2.append("text").attr("x", 40).attr("y", 110).text(d3.format(".0f")(list_color[0])).style("font-size", "15px").attr("alignment-baseline","middle")
+                                legend2.append("text").attr("x", 40).attr("y", 135).text("0").style("font-size", "15px").attr("alignment-baseline","middle")
+
+                }
+                
+                colorhuemap();
+            </script>
+        </p>
+    </body>
+</html>

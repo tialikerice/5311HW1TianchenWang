@@ -1,0 +1,51 @@
+
+<html>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://d3js.org/topojson.v3.min.js"></script>
+<button id ="a">download</button>
+<script>
+const colorhuemap = async function() {
+    const street_tree_filtered = await d3.csv('Street_Tree_List-2022-01-30_FILTERED.csv');
+    console.log(street_tree_filtered);
+    street_tree_filtered.forEach( (d) => {d['Latitude'] = Number(d['Latitude']); 
+                                            d['Longitude'] = Number(d['Longitude']);
+                                            d['SiteOrder'] = Number(d['SiteOrder'])});
+    const SF_Neighborhoods = await d3.json('SF-Neighborhoods.geo.json');
+    console.log(SF_Neighborhoods);
+
+    var Neighborhoods = topojson.feature(SF_Neighborhoods, SF_Neighborhoods.objects.SFNeighborhoods); 
+    
+    var polygonCounts = {};
+    var Neighborhoods_feature = topojson.feature(SF_Neighborhoods, SF_Neighborhoods.objects.SFNeighborhoods).features;
+    Neighborhoods_feature.forEach(polygon => {
+        // Get the polygon's name
+        var polygonName = polygon.properties.name;
+        console.log(polygonName)
+        // Initialize the count for this polygon to 0
+        polygonCounts[polygonName] = 0;
+        // Iterate through each point in the data points
+        street_tree_filtered.forEach(point=>{
+            // Convert the point's latitude and longitude into a GeoJSON Point
+            var pointGeoJSON = {
+                type: "Point",
+                coordinates: [point.Longitude, point.Latitude]
+            };
+            // Use the D3 path generator to check if the point is within the polygon
+            if (d3.geoContains(polygon, pointGeoJSON.coordinates)) {
+                // If the point is within the polygon, increment the count for that polygon
+                polygonCounts[polygonName]++;
+            }
+        });
+    });
+    const blob = new Blob([JSON.stringify(polygonCounts)], {type: 'application/json'});
+
+    // Create a link element and trigger a download
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'polygonCounts.json';
+    link.click();
+    }
+                
+colorhuemap();
+</script>
+</html>
