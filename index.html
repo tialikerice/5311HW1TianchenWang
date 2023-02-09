@@ -272,7 +272,7 @@
                         .attr("x", (mapWidth3 / 2))             
                         .attr("y", mapHeight3 +50)
                         .attr("text-anchor", "middle")  
-                        .style("font-size", "20px") 
+                        .style("font-size", "25px") 
                         .style("fill", "white")
                         .text("Years Of The Trees");
                     map3.append("line")
@@ -294,9 +294,10 @@
                         .attr("class", "y label")
                         .attr("text-anchor", "end")
                         .attr("y", -85)
+                        .attr("x", -150)
                         .attr("dy", ".75em")
                         .attr("transform", "rotate(-90)")
-                        .style("font-size", "20px") 
+                        .style("font-size", "25px") 
                         .style("fill", "white")
                         .text("Frequency");
                 }
@@ -369,15 +370,15 @@
                                             .y(function(d){ return y(d[1]); });
                     let lineGroup = map4.append('g').attr('id', "lineGroup");
                     lineGroup.selectAll("path")
-                                .data(arryList)
-                                .join("path")
-                                .attr("fill", "None")
-                                .attr("stroke", (d) => { return colorScale(d.qCaretaker) } )
-                                .attr("stroke-width", 2)
-                                .attr("d", (d) => { return caretakerLine(d.Year)})
+                            .data(arryList)
+                            .join("path")
+                            .attr("fill", "None")
+                            .attr("stroke", (d) => { return colorScale(d.qCaretaker) } )
+                            .attr("stroke-width", 2)
+                            .attr("d", (d) => { return caretakerLine(d.Year)})
                     const legend = map4.append("g")
-                                .attr("transform", "translate(" + (mapWidth4 - 70) + "," + (20) + ")")
-                                .attr("id", "legend");
+                                        .attr("transform", "translate(" + (mapWidth4 - 70) + "," + (20) + ")")
+                                        .attr("id", "legend");
 
                     legend.selectAll("rect")
                             .data(arryList)
@@ -409,7 +410,8 @@
                     map4.append("text")
                             .attr("class", "y label")
                             .attr("text-anchor", "end")
-                            .attr("y", -80)
+                            .attr("y", -70)
+                            .attr("x", -150)
                             .attr("dy", ".75em")
                             .attr("transform", "rotate(-90)")
                             .style("font-size", "20px") 
